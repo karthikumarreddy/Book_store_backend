@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import com.bookstore.config.GetDataSource;
+import com.bookstore.config.ConnectionFactory;
 import com.bookstore.dto.UsersDTO;
 
 public class UsersDAO {
@@ -12,7 +12,8 @@ public class UsersDAO {
 		
 		if(userName!=null) {
 			String sql="select * from  users where user_name=?";
-			try(Connection  con=GetDataSource.getDataSource().getConnection();PreparedStatement ps=con.prepareStatement(sql)){
+			try (Connection con = ConnectionFactory.getConnectionInstance();
+					PreparedStatement ps = con.prepareStatement(sql)) {
 				ps.setString(1, userName);
 				ResultSet rs=ps.executeQuery();
 				if(rs.next()) {
@@ -35,7 +36,8 @@ public class UsersDAO {
 	public static boolean addUser(UsersDTO user) {
 		if(user!=null) {
 			String sql="INSERT INTO users (fullName,password,email,created_at, updated_at,is_active) VALUES (?,?, ?, ?);";
-			try(Connection con=GetDataSource.getDataSource().getConnection();PreparedStatement ps=con.prepareStatement(sql)){
+			try (Connection con = ConnectionFactory.getConnectionInstance();
+					PreparedStatement ps = con.prepareStatement(sql)) {
 				ps.setString(1, user.getFullName());
 				ps.setString(2, user.getPassword());
 				ps.setString(3, user.getEmail());

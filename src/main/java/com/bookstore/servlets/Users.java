@@ -32,10 +32,20 @@ public class Users extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<<<<<<< HEAD
 		
 				response.getWriter().write(LoginService.loginValidation(request, response));
+=======
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		
+				response.getWriter().write(UsersServices.validateUser(request));
+>>>>>>> branch 'main' of https://github.com/karthikumarreddy/Book_store_backend.git
 			}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> branch 'main' of https://github.com/karthikumarreddy/Book_store_backend.git
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
