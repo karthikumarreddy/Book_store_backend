@@ -3,6 +3,8 @@ package com.bookstore.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.bookstore.services.BookService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,10 +14,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/books/*")
 public class Books extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private static BookService service;
 
     public Books() {
         super();
+		service = new BookService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,8 +44,8 @@ public class Books extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		doGet(request, response);
+		response.setContentType("application/json");
+		response.getWriter().write(service.saveBook(request));
 	}
 
 
