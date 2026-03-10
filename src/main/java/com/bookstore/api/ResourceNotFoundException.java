@@ -1,20 +1,17 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// FILE 1 of 3:  ResourceNotFoundException.java
-// Package: com.bookstore.api  (confirmed from WAR bytecode)
-//
-// FIX applied: WAR had "public type ResourceNotFoundException must be defined in
-// its own file" — each exception is now in a separate file as Java mandates.
-// ─────────────────────────────────────────────────────────────────────────────
-
 package com.bookstore.api;
 
 public class ResourceNotFoundException extends RuntimeException {
 
-    public ResourceNotFoundException(String message) {
+	private static final long serialVersionUID = 4180504319036010598L;
+
+	public ResourceNotFoundException(String message) {
         super(message);
     }
 
-    /** Convenience factory — matches WAR signature: (String, Object) */
+	public ResourceNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
     public static ResourceNotFoundException of(String resource, Object id) {
         return new ResourceNotFoundException(resource + " not found with id: " + id);
     }
