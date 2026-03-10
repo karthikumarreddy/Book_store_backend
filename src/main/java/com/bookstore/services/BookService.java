@@ -6,11 +6,15 @@ import java.util.List;
 import com.bookstore.dto.BooksDTO;
 
 public class BookService {
-public List<BooksDTO> getAllBook() {
-	List<BooksDTO> book = null;
-	return book;
-}
-public void getBookId(Integer id) {
-	
-}
+
+	public void findRequest() {
+
+	}
+	public List<BooksDTO> getAllBook() {
+		List<BooksDTO> book = null;
+		return book;
+	}
+	public void getBookId(Integer id) {
+		
+	}
 }
