@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import com.bookstore.config.GetDataSource;
 import com.bookstore.dto.UsersDTO;
-import com.bookstore.services.GetDataSource;
 
 public class UsersDAO {
 	public static UsersDTO findByUser(String userName) {
