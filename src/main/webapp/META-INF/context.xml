@@ -16,13 +16,13 @@
     <!-- Datasource configuration -->
 
     <Resource 
-    	name="jdbc/fashion_db"
+    	name="jdbc/book_store_db"
     	auth="Container"
     	type="javax.sql.DataSource"
     	
     	
     	driverClassName="org.postgresql.Driver"
-    	url="jdbc:postgresql://localhost:5432/book_store_db"
+    	url="jdbc:postgresql://localhost:5432/bookstore_db"
     	username="postgres"
     	password="postgres"
     	

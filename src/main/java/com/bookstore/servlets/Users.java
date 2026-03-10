@@ -1,23 +1,29 @@
 package com.bookstore.servlets;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+
+import com.bookstore.dto.UsersDTO;
+import com.bookstore.services.LoginService;
+import com.bookstore.services.UsersServices;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Servlet implementation class Login_Servlet
  */
 @WebServlet("/login")
-public class Login_Servlet extends HttpServlet {
+public class Users extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login_Servlet() {
+    public Users() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,8 +33,9 @@ public class Login_Servlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+				response.getWriter().write(LoginService.loginValidation(request, response));
+			}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
