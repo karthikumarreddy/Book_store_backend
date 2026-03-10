@@ -1,4 +1,4 @@
-package com.bookstore.api;
+package com.bookstore.exceptions;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) {
