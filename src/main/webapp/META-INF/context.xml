@@ -16,7 +16,7 @@
     <!-- Datasource configuration -->
 
     <Resource 
-    	name="jdbc/fashion_db"
+    	name="jdbc/book_store_db"
     	auth="Container"
     	type="javax.sql.DataSource"
     	
