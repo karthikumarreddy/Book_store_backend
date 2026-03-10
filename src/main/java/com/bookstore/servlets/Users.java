@@ -11,13 +11,13 @@ import java.io.IOException;
  * Servlet implementation class Login_Servlet
  */
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class Users extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public Users() {
         super();
         // TODO Auto-generated constructor stub
     }
