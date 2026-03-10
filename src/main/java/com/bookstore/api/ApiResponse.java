@@ -1,7 +1,9 @@
 package com.bookstore.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.Instant;
+
+import com.bookstore.util.JsonConvertor;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Generic API response wrapper for all endpoints in the Bookstore backend.
@@ -16,12 +18,12 @@ public class ApiResponse<T> {
     private boolean success;
     private String message;
     private T data;
-    private Object errors;
+    private Exception errors;
     private Meta meta;
     private Instant timestamp;
 
 
-    private ApiResponse() {
+	public ApiResponse() {
         this.timestamp = Instant.now();
     }
 
@@ -52,7 +54,7 @@ public class ApiResponse<T> {
             return this;
         }
 
-        public Builder<T> errors(Object errors) {
+        public Builder<T> errors(Exception errors) {
             response.errors = errors;
             return this;
         }
@@ -68,37 +70,41 @@ public class ApiResponse<T> {
     }
 
     
-    public static <T> ApiResponse<T> successResponse(String message, T data) {
-        return ApiResponse.<T>builder()
+    public String successResponse(String message, T data) {
+        return JsonConvertor.convertToJson(ApiResponse.<T>builder()
                 .success(true)
                 .message(message)
                 .data(data)
-                .build();
+                .build());
     }
 
-    public static <T> ApiResponse<T> successResponse(String message, T data, Meta meta) {
-        return ApiResponse.<T>builder()
+	public String successResponse(String message, T data, Meta meta) {
+        return JsonConvertor.convertToJson(ApiResponse.<T>builder()
                 .success(true)
                 .message(message)
                 .data(data)
                 .meta(meta)
-                .build();
+                .build());
     }
 
-    public static <T> ApiResponse<T> errorResponse(String message, Object errors) {
-        return ApiResponse.<T>builder()
+    public String errorResponse(String message, Exception errors) {
+        return JsonConvertor.convertToJson(ApiResponse.<Exception>builder()
                 .success(false)
                 .message(message)
                 .errors(errors)
-                .build();
+                .build());
     }
 
-    public static <T> ApiResponse<T> errorResponse(String message) {
-        return ApiResponse.<T>builder()
+    public String errorResponse(String message) {
+        return JsonConvertor.convertToJson(ApiResponse.<T>builder()
                 .success(false)
                 .message(message)
-                .build();
+                .build());
     }
+
+	public static String error(String message, T data, Meta meta) {
+		return "";
+	}
 
     // ─── Getters ──────────────────────────────────────────────────────────────
 

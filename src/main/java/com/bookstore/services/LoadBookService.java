@@ -1,14 +1,20 @@
 package com.bookstore.services;
 
+import java.util.List;
+
+import com.bookstore.api.ApiResponse;
+import com.bookstore.dao.BookRepo;
+import com.bookstore.dto.BooksDTO;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 public class LoadBookService {
 
 	public static String addBook(HttpServletRequest request) {
 		
-		String title = request.getParameter("title");
-		String author = request.getParameter("author");
-		String category = request.getParameter("category");
+		
+		
+		new BooksDTO();
 		
 		return null;
 	}
