@@ -64,5 +64,17 @@ public class BooksDTO {
 		this.description = description;
 	}
 	
+	public BooksDTO(String title, String author, String category, Double price, String image,
+			String description) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.category = category;
+		this.price = price;
+		this.image = image;
+		this.description = description;
+	}
+
 	public BooksDTO() {}
 }

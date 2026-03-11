@@ -9,6 +9,8 @@ public class UsersDTO {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	private boolean is_active;
+	
+	
 	public String getFullName() {
 		return fullName;
 	}

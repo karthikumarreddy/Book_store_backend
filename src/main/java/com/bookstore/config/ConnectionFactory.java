@@ -8,8 +8,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.bookstore.api.ResourceNotFoundException;
 import com.bookstore.exceptions.ConnectionTimeoutException;
+import com.bookstore.exceptions.ResourceNotFoundException;
 
 public class ConnectionFactory {
 	private static DataSource datasource;

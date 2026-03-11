@@ -1,8 +1,7 @@
 package com.bookstore.api;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
-import com.bookstore.util.JsonConvertor;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -16,102 +15,99 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ApiResponse<T> {
 
     private boolean success;
+	private int statusCode;
     private String message;
     private T data;
     private Exception errors;
     private Meta meta;
-    private Instant timestamp;
-
+	private String timestamp;
 
 	public ApiResponse() {
-        this.timestamp = Instant.now();
-    }
 
-
-    public static <T> Builder<T> builder() {
-        return new Builder<>();
-    }
-
-    public static class Builder<T> {
-        private final ApiResponse<T> response;
-
-        private Builder() {
-            this.response = new ApiResponse<>();
-        }
-
-        public Builder<T> success(boolean success) {
-            response.success = success;
-            return this;
-        }
-
-        public Builder<T> message(String message) {
-            response.message = message;
-            return this;
-        }
-
-        public Builder<T> data(T data) {
-            response.data = data;
-            return this;
-        }
-
-        public Builder<T> errors(Exception errors) {
-            response.errors = errors;
-            return this;
-        }
-
-        public Builder<T> meta(Meta meta) {
-            response.meta = meta;
-            return this;
-        }
-
-        public ApiResponse<T> build() {
-            return response;
-        }
-    }
-
-    
-    public String successResponse(String message, T data) {
-        return JsonConvertor.convertToJson(ApiResponse.<T>builder()
-                .success(true)
-                .message(message)
-                .data(data)
-                .build());
-    }
-
-	public String successResponse(String message, T data, Meta meta) {
-        return JsonConvertor.convertToJson(ApiResponse.<T>builder()
-                .success(true)
-                .message(message)
-                .data(data)
-                .meta(meta)
-                .build());
-    }
-
-    public String errorResponse(String message, Exception errors) {
-        return JsonConvertor.convertToJson(ApiResponse.<Exception>builder()
-                .success(false)
-                .message(message)
-                .errors(errors)
-                .build());
-    }
-
-    public String errorResponse(String message) {
-        return JsonConvertor.convertToJson(ApiResponse.<T>builder()
-                .success(false)
-                .message(message)
-                .build());
-    }
-
-	public static String error(String message, T data, Meta meta) {
-		return "";
 	}
 
-    // ─── Getters ──────────────────────────────────────────────────────────────
+	public ApiResponse(boolean success, int statusCode, String message, T data, Exception errors, Meta meta, String timestamp) {
+		super();
+		this.success = success;
+		this.statusCode = statusCode;
+		this.message = message;
+		this.data = data;
+		this.errors = errors;
+		this.meta = meta;
+		this.timestamp = timestamp;
+	}
 
-    public boolean isSuccess()    { return success;   }
-    public String getMessage()    { return message;   }
-    public T getData()            { return data;      }
-    public Object getErrors()     { return errors;    }
-    public Meta getMeta()         { return meta;      }
-    public Instant getTimestamp() { return timestamp; }
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	public Exception getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Exception errors) {
+		this.errors = errors;
+	}
+
+	public Meta getMeta() {
+		return meta;
+	}
+
+	public void setMeta(Meta meta) {
+		this.meta = meta;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public static <T> ApiResponse<T> successResponse(String message, T data, int statuCode) {
+		return new ApiResponse<T>(true, statuCode, message, data, null, null, LocalDateTime.now().toString());
+    }
+
+	public static <T> ApiResponse<T> successResponse(String message, T data, Meta meta, int statuCode) {
+		return new ApiResponse<T>(true, statuCode, message, data, null, null, LocalDateTime.now().toString());
+    }
+
+	public static <T> ApiResponse<T> errorResponse(String message, Exception errors, int statuCode) {
+		return new ApiResponse<T>(true, statuCode, message, null, errors, null, LocalDateTime.now().toString());
+    }
+
+	public static <T> ApiResponse<T> errorResponse(String message, int statuCode) {
+		return new ApiResponse<T>(true, statuCode, message, null, null, null, LocalDateTime.now().toString());
+    }
+
+
 }

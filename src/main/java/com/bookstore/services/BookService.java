@@ -1,21 +1,54 @@
 package com.bookstore.services;
 
-import java.util.List;
+import java.sql.SQLException;
 
 import com.bookstore.api.ApiResponse;
 import com.bookstore.dao.BookRepo;
 import com.bookstore.dto.BooksDTO;
+import com.bookstore.exceptions.ConnectionTimeoutException;
+import com.bookstore.util.JsonConvertor;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class BookService {
+
+
+	BookRepo repo;
+
+	public BookService() {
+		repo = new BookRepo();
+	}
 
 	public void findRequest() {
 
 	}
-	public List<BooksDTO> getAllBook() {
-		List<BooksDTO> book = null;
-		return book;
+
+	public String getAllBook() {
+		
+		try {
+		ApiResponse<Boolean> res;
+		boolean getData;
+		
+		getData = repo.insertBookData(new BooksDTO());// call get data method from DAO
+		if (getData) {
+			res = ApiResponse.successResponse("Book Created !", null, HttpServletResponse.SC_CREATED);
+		} else {
+			res = ApiResponse.successResponse("Book creation failed", null,
+					HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+		return JsonConvertor.convertToJson(res);
+	} catch (SQLException e) {
+		return JsonConvertor.convertToJson(
+				ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+	} catch (ConnectionTimeoutException e) {
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+		} catch (IllegalArgumentException e) {
+		return JsonConvertor
+				.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST));
+		}
+		
+
 	}
 	public void getBookId(Integer id) {
 		
@@ -26,9 +59,9 @@ public class BookService {
 	 * 
 	 * @param HttpServletRequest book data
 	 */
+
 	public String saveBook(HttpServletRequest request) {
 		try {
-			String id = request.getParameter("id").trim();
 			String title = request.getParameter("title").trim();
 			String author = request.getParameter("author").trim();
 			String category = request.getParameter("category").trim();
@@ -36,9 +69,7 @@ public class BookService {
 			String image = request.getParameter("image").trim();
 			String description = request.getParameter("description").trim();
 			
-			if(id==null || id.equals("")) {
-				throw new IllegalArgumentException("Id must not empty"); 
-			}
+
 			
 			if(title==null || title.equals("")) {
 				throw new IllegalArgumentException("Title must not empty"); 
@@ -64,11 +95,26 @@ public class BookService {
 				throw new IllegalArgumentException("description must not empty"); 
 			}
 			
-			BookRepo.insertBookData(new BooksDTO(id, title, author, category, price, image, description));
+			boolean inserted;
 
-			ApiResponse.error();
+			inserted = repo.insertBookData(new BooksDTO(title, author, category, price, image, description));
+
+			ApiResponse<Boolean> res;
+
+			if (inserted) {
+				res = ApiResponse.successResponse("Book Created !", null, HttpServletResponse.SC_CREATED);
+			} else {
+				res = ApiResponse.successResponse("Book creation failed", null, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
+
+			return JsonConvertor.convertToJson(res);
+
+		} catch (SQLException e) {
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+		} catch (ConnectionTimeoutException e) {
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
 		}catch (IllegalArgumentException e) {
-			return new ApiResponse.errorResponse(e.getMessage(), e);
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST));
 		}
 	}
 }
