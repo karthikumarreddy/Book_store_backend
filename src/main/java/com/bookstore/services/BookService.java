@@ -20,8 +20,13 @@ public class BookService {
 	public void getBookId(Integer id) {
 		
 	}
-	
-	public String saveook(HttpServletRequest request) {
+
+	/**
+	 * This method responsible for transfer book data to DAO
+	 * 
+	 * @param HttpServletRequest book data
+	 */
+	public String saveBook(HttpServletRequest request) {
 		try {
 			String id = request.getParameter("id").trim();
 			String title = request.getParameter("title").trim();
