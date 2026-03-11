@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.bookstore.config.ConnectionFactory;
 import com.bookstore.dto.BooksDTO;
@@ -54,22 +55,23 @@ public class BookRepo {
 		return bookList;
 	}
 	
-	public List<BooksDTO> getBookByID(long id) throws SQLException, ConnectionTimeoutException {
-		List<BooksDTO> bookList = new ArrayList<>();
+	public Optional<BooksDTO> getBookByID(long id) throws SQLException, ConnectionTimeoutException {
+		BooksDTO bookData =null;
 		try (Connection connection = ConnectionFactory.getConnectionInstance();
 				PreparedStatement prepareStatement = connection.prepareStatement("select * from books where id=?")) {
 			prepareStatement.setLong(1, id);
 			ResultSet rs = prepareStatement.executeQuery();
 			while (rs.next()) {
-				bookList.add(new BooksDTO(rs.getInt("id"), rs.getString("title"), rs.getString("author"),
+				bookData=new BooksDTO(rs.getInt("id"), rs.getString("title"), rs.getString("author"),
 						rs.getString("category"), rs.getDouble("price"), rs.getString("image"),
-						rs.getString("description")));
+						rs.getString("description"));
 			}
 
 		} catch (ConnectionTimeoutException e) {
 			throw e;
 		}
-		return bookList;
+		return Optional.of(bookData);
+		
 	}
 	
 	
