@@ -21,7 +21,7 @@ public class UsersDAO {
 					user.setEmail(rs.getString("email"));
 					user.setCreated_at(rs.getTimestamp("created_at"));
 					user.setUpdated_at(rs.getTimestamp("updated_at"));
-					user.setIs_active(rs.getBoolean("is_active"));
+					user.setIs_active(rs.getBoolean("i[[s_active"));
 					return user;
 				}
 			}catch (Exception e) {
