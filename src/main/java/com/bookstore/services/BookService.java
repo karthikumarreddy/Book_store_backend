@@ -6,6 +6,7 @@ import com.bookstore.api.ApiResponse;
 import com.bookstore.dao.BookRepo;
 import com.bookstore.dto.BooksDTO;
 import com.bookstore.exceptions.ConnectionTimeoutException;
+import com.bookstore.util.JsonConvertor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,26 +24,31 @@ public class BookService {
 
 	}
 
-	public ApiResponse<Boolean> getAllBook() {
+	public String getAllBook() {
 		
 		try {
 		ApiResponse<Boolean> res;
 		boolean getData;
 		
-		getData = repo.insertBookData(new BooksDTO());// call get data method from DAO
+		getData = true;// call get data method from DAO
 		if (getData) {
 			res = ApiResponse.successResponse("Book Created !", null, HttpServletResponse.SC_CREATED);
 		} else {
 			res = ApiResponse.successResponse("Book creation failed", null,
 					HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
-		return res;
 	} catch (SQLException e) {
-		return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	} catch (ConnectionTimeoutException e) {
-		return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		} catch (IllegalArgumentException e) {
-			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST);
+		return JsonConvertor.convertToJson(
+				ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+	}catch(
+	ConnectionTimeoutException e)
+	{
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+		}catch(
+	IllegalArgumentException e)
+	{
+		return JsonConvertor
+				.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST));
 		}
 		
 
@@ -57,8 +63,9 @@ public class BookService {
 	 * @param HttpServletRequest book data
 	 */
 
-	public ApiResponse<Boolean> saveBook(HttpServletRequest request) {
+	public String saveBook(HttpServletRequest request) {
 		try {
+			String id = request.getParameter("id").trim();
 			String title = request.getParameter("title").trim();
 			String author = request.getParameter("author").trim();
 			String category = request.getParameter("category").trim();
@@ -66,7 +73,9 @@ public class BookService {
 			String image = request.getParameter("image").trim();
 			String description = request.getParameter("description").trim();
 			
-
+			if(id==null || id.equals("")) {
+				throw new IllegalArgumentException("Id must not empty"); 
+			}
 			
 			if(title==null || title.equals("")) {
 				throw new IllegalArgumentException("Title must not empty"); 
@@ -89,12 +98,12 @@ public class BookService {
 			}
 	
 			if(description==null || description.equals("")) {
-				throw new IllegalArgumentException("description must not empty");
+				throw new IllegalArgumentException("description must not empty"); 
 			}
 			
 			boolean inserted;
 
-			inserted = repo.insertBookData(new BooksDTO(title, author, category, price, image, description));
+			inserted = repo.insertBookData(new BooksDTO(id, title, author, category, price, image, description));
 
 			ApiResponse<Boolean> res;
 
@@ -104,14 +113,14 @@ public class BookService {
 				res = ApiResponse.successResponse("Book creation failed", null, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
 
-			return res;
+			return JsonConvertor.convertToJson(res);
 
 		} catch (SQLException e) {
-			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
 		} catch (ConnectionTimeoutException e) {
-			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
 		}catch (IllegalArgumentException e) {
-			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST);
+			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST));
 		}
 	}
 }
