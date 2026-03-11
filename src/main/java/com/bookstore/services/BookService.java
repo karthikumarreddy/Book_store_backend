@@ -24,14 +24,14 @@ public class BookService {
 
 	}
 
-	public ApiResponse<Boolean> getAllBook() {
+	public ApiResponse<List<BooksDTO>> getAllBook() {
 		try {
-			ApiResponse<Boolean> res;
+			ApiResponse<List<BooksDTO>> res;
 			List<BooksDTO> getData = null;
 
 			getData = repo.getAllBooks();
 			if (getData != null) {
-				res = ApiResponse.success("Book Created !", null, HttpServletResponse.SC_CREATED);
+				res = ApiResponse.success("Book Created !", getData, HttpServletResponse.SC_OK);
 			} else {
 				res = ApiResponse.success("Book creation failed", null, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
