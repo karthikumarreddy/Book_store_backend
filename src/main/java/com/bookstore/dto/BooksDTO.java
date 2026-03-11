@@ -2,7 +2,7 @@ package com.bookstore.dto;
 
 public class BooksDTO {
 
-	private String id;
+	private int id;
 	private String title;
 	private String author;
 	private String category;
@@ -10,10 +10,11 @@ public class BooksDTO {
 	private String image;
 	private String description;
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getTitle() {
@@ -52,7 +53,8 @@ public class BooksDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public BooksDTO(String id, String title, String author, String category, Double price, String image,
+
+	public BooksDTO(int id, String title, String author, String category, Double price, String image,
 			String description) {
 		super();
 		this.id = id;
@@ -67,7 +69,6 @@ public class BooksDTO {
 	public BooksDTO(String title, String author, String category, Double price, String image,
 			String description) {
 		super();
-		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.category = category;
