@@ -11,12 +11,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/books/*")
-public class Books extends HttpServlet {
+/**
+ * Servlet implementation class BookResource
+ */
+@WebServlet("/api/books/*")
+public class BookResource extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static BookService service;
 
-    public Books() {
+	public BookResource() {
         super();
 		service = new BookService();
     }
@@ -32,13 +35,11 @@ public class Books extends HttpServlet {
 
 		PrintWriter responseWriter = response.getWriter();
 
-
-		if (splittedPath.length <= 1) {
-			responseWriter.append("{ \"status\": \"success\", \"message\" : \"All books\" }");
+		if (splittedPath.length <= 1) { // ['books'] => base url -> all books
+			responseWriter.append(service.getAllBook());
 		} else {
 			responseWriter.append("{ \"status\": \"success\", \"message\" : \"Specific books\" }");
 		}
-
 
 	}
 
@@ -48,14 +49,12 @@ public class Books extends HttpServlet {
 		response.getWriter().write(service.saveBook(request));
 	}
 
-
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
 
-
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 	}
 
 }
