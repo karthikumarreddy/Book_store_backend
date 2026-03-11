@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import com.bookstore.config.ConnectionFactory;
 import com.bookstore.dto.UsersDTO;
 
+
 public class UsersDAO {
 	public static UsersDTO findByUser(String userName) {
 		
@@ -23,7 +24,7 @@ public class UsersDAO {
 					user.setEmail(rs.getString("email"));
 					user.setCreated_at(rs.getTimestamp("created_at"));
 					user.setUpdated_at(rs.getTimestamp("updated_at"));
-					user.setIs_active(rs.getBoolean("i[[s_active"));
+					user.setIs_active(rs.getBoolean("is_active"));
 					return user;
 				}
 			}catch (Exception e) {
@@ -35,7 +36,7 @@ public class UsersDAO {
 	
 	public static boolean addUser(UsersDTO user) {
 		if(user!=null) {
-			String sql="INSERT INTO users (fullName,password,email,created_at, updated_at,is_active) VALUES (?,?, ?, ?);";
+			String sql="INSERT INTO users (fullName,password,email,created_at, updated_at,is_active) VALUES (?,?, ?, ?,?,?);";
 			try (Connection con = ConnectionFactory.getConnectionInstance();
 					PreparedStatement ps = con.prepareStatement(sql)) {
 				ps.setString(1, user.getFullName());
