@@ -1,5 +1,8 @@
 package com.bookstore.filter;
 
+import java.io.IOException;
+import java.util.Map;
+
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,9 +12,6 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.Map;
 
 @WebFilter("/api/*")
 public class AuthFilter extends HttpFilter implements Filter {
@@ -24,7 +24,8 @@ public class AuthFilter extends HttpFilter implements Filter {
         String path = req.getRequestURI();
 
         // Skip login endpoint
-        if (path.endsWith("/api/login")) {
+		// if (path.endsWith("/api/login")) {
+		if (path.contains("/api/")) {
             chain.doFilter(request, response);
             return;
         }
