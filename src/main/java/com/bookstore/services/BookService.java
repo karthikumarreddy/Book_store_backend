@@ -6,7 +6,6 @@ import com.bookstore.api.ApiResponse;
 import com.bookstore.dao.BookRepo;
 import com.bookstore.dto.BooksDTO;
 import com.bookstore.exceptions.ConnectionTimeoutException;
-import com.bookstore.util.JsonConvertor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +23,7 @@ public class BookService {
 
 	}
 
-	public String getAllBook() {
+	public ApiResponse<Boolean> getAllBook() {
 		
 		try {
 		ApiResponse<Boolean> res;
@@ -37,15 +36,13 @@ public class BookService {
 			res = ApiResponse.successResponse("Book creation failed", null,
 					HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
-		return JsonConvertor.convertToJson(res);
+		return res;
 	} catch (SQLException e) {
-		return JsonConvertor.convertToJson(
-				ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+		return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	} catch (ConnectionTimeoutException e) {
-			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+		return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		} catch (IllegalArgumentException e) {
-		return JsonConvertor
-				.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST));
+			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST);
 		}
 		
 
@@ -60,7 +57,7 @@ public class BookService {
 	 * @param HttpServletRequest book data
 	 */
 
-	public String saveBook(HttpServletRequest request) {
+	public ApiResponse<Boolean> saveBook(HttpServletRequest request) {
 		try {
 			String title = request.getParameter("title").trim();
 			String author = request.getParameter("author").trim();
@@ -107,14 +104,14 @@ public class BookService {
 				res = ApiResponse.successResponse("Book creation failed", null, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
 
-			return JsonConvertor.convertToJson(res);
+			return res;
 
 		} catch (SQLException e) {
-			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		} catch (ConnectionTimeoutException e) {
-			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}catch (IllegalArgumentException e) {
-			return JsonConvertor.convertToJson(ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST));
+			return ApiResponse.errorResponse(e.getMessage(), e, HttpServletResponse.SC_BAD_REQUEST);
 		}
 	}
 }
