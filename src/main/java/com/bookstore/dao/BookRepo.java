@@ -53,6 +53,26 @@ public class BookRepo {
 		}
 		return bookList;
 	}
+	
+	public List<BooksDTO> getBookByID(long id) throws SQLException, ConnectionTimeoutException {
+		List<BooksDTO> bookList = new ArrayList<>();
+		try (Connection connection = ConnectionFactory.getConnectionInstance();
+				PreparedStatement prepareStatement = connection.prepareStatement("select * from books where id=?")) {
+			prepareStatement.setLong(1, id);
+			ResultSet rs = prepareStatement.executeQuery();
+			while (rs.next()) {
+				bookList.add(new BooksDTO(rs.getInt("id"), rs.getString("title"), rs.getString("author"),
+						rs.getString("category"), rs.getDouble("price"), rs.getString("image"),
+						rs.getString("description")));
+			}
+
+		} catch (ConnectionTimeoutException e) {
+			throw e;
+		}
+		return bookList;
+	}
+	
+	
 
 }
 
