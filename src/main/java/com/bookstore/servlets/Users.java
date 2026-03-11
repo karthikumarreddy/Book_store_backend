@@ -1,11 +1,8 @@
 package com.bookstore.servlets;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
-import com.bookstore.dto.UsersDTO;
-import com.bookstore.services.LoginService;
-
+import com.bookstore.services.UsersService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,20 +28,18 @@ public class Users extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-				response.getWriter().write(LoginService.loginValidation(request, response));
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 			}
 
 	
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest req	uest, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		response.getWriter().write(UsersService.loginValidation(request, response));
+		response.getWriter().write(UsersService.signUp(request, response));
+
 	}
 
 }
