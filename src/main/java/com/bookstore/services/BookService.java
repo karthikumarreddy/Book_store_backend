@@ -89,7 +89,7 @@ public class BookService {
 			}
 	
 			if(description==null || description.equals("")) {
-				throw new IllegalArgumentException("description must not empty"); 
+				throw new IllegalArgumentException("description must not empty");
 			}
 			
 			boolean inserted;

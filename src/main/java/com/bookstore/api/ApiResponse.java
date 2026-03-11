@@ -1,24 +1,14 @@
 package com.bookstore.api;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-/**
- * Generic API response wrapper for all endpoints in the Bookstore backend.
- * Package: com.bookstore.api  (matches compiled WAR structure)
- *
- * Fields confirmed from WAR bytecode:
- *   success | message | data<T> | errors | meta | timestamp
- */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
 
     private boolean success;
 	private int statusCode;
     private String message;
     private T data;
-    private Exception errors;
+	private String errors; // Changed from Exception to List<String> for safety
     private Meta meta;
 	private String timestamp;
 
@@ -26,8 +16,8 @@ public class ApiResponse<T> {
 
 	}
 
-	public ApiResponse(boolean success, int statusCode, String message, T data, Exception errors, Meta meta, String timestamp) {
-		super();
+	// All-Args Constructor
+	public ApiResponse(boolean success, int statusCode, String message, T data, String errors, Meta meta, String timestamp) {
 		this.success = success;
 		this.statusCode = statusCode;
 		this.message = message;
@@ -36,6 +26,8 @@ public class ApiResponse<T> {
 		this.meta = meta;
 		this.timestamp = timestamp;
 	}
+
+	// --- Getters and Setters ---
 
 	public boolean isSuccess() {
 		return success;
@@ -69,11 +61,11 @@ public class ApiResponse<T> {
 		this.data = data;
 	}
 
-	public Exception getErrors() {
+	public String getErrors() {
 		return errors;
 	}
 
-	public void setErrors(Exception errors) {
+	public void setErrors(String errors) {
 		this.errors = errors;
 	}
 
@@ -93,21 +85,21 @@ public class ApiResponse<T> {
 		this.timestamp = timestamp;
 	}
 
-	public static <T> ApiResponse<T> successResponse(String message, T data, int statuCode) {
-		return new ApiResponse<T>(true, statuCode, message, data, null, null, LocalDateTime.now().toString());
+	public static <T> ApiResponse<T> success(String message, T data, int statusCode) {
+		return new ApiResponse<>(true, statusCode, message, data, null, null, Instant.now().toString());
     }
 
-	public static <T> ApiResponse<T> successResponse(String message, T data, Meta meta, int statuCode) {
-		return new ApiResponse<T>(true, statuCode, message, data, null, null, LocalDateTime.now().toString());
+	public static <T> ApiResponse<T> success(String message, T data, Meta meta, int statusCode) {
+		return new ApiResponse<>(true, statusCode, message, data, null, meta, Instant.now().toString());
     }
 
-	public static <T> ApiResponse<T> errorResponse(String message, Exception errors, int statuCode) {
-		return new ApiResponse<T>(true, statuCode, message, null, errors, null, LocalDateTime.now().toString());
+	// Fixed: success is now FALSE for errors
+	public static <T> ApiResponse<T> error(String message, int statusCode) {
+		return new ApiResponse<>(false, statusCode, message, null, null, null, Instant.now().toString());
     }
 
-	public static <T> ApiResponse<T> errorResponse(String message, int statuCode) {
-		return new ApiResponse<T>(true, statuCode, message, null, null, null, LocalDateTime.now().toString());
+	// Fixed: success is now FALSE, errors is List<String>
+	public static <T> ApiResponse<T> error(String message, String errors, int statusCode) {
+		return new ApiResponse<>(false, statusCode, message, null, errors, null, Instant.now().toString());
     }
-
-
 }

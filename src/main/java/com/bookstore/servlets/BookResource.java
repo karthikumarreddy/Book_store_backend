@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.bookstore.services.BookService;
+import com.bookstore.util.ResponseWrapper;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,12 +12,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/books/*")
-public class Books extends HttpServlet {
+/**
+ * Servlet implementation class BookResource
+ */
+@WebServlet("/api/books/*")
+public class BookResource extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static BookService service;
 
-    public Books() {
+	public BookResource() {
         super();
 		service = new BookService();
     }
@@ -25,37 +29,32 @@ public class Books extends HttpServlet {
 
 		// splitting request URI.
 
-		response.setContentType("application/json");
-
 		String path = request.getRequestURI().substring(request.getContextPath().length() + 1);
 		String[] splittedPath = path.split("/"); // ['books', 'path if any'.]
 
 		PrintWriter responseWriter = response.getWriter();
 
-
-		if (splittedPath.length <= 1) {
-			responseWriter.append("{ \"status\": \"success\", \"message\" : \"All books\" }");
+		if (splittedPath.length <= 1) { // ['books'] => base url -> all books
+			ResponseWrapper.writeResponse(response, service.getAllBook());
 		} else {
-			responseWriter.append("{ \"status\": \"success\", \"message\" : \"Specific books\" }");
+			ResponseWrapper.writeResponse(response, service.getAllBook());
 		}
-
 
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("application/json");
-		response.getWriter().write(service.saveBook(request));
-	}
 
+		ResponseWrapper.writeResponse(response, service.saveBook(request));
+
+	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
 
-
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 	}
 
 }
